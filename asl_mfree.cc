@@ -30,7 +30,8 @@ int main(int argc, char *argv[])
 {
   try {
 
-    cout << "ASL_MFREE (1.0)" << endl;
+    //cout << "ASL_MFREE (1.0)" << endl;
+    cout << "ASL_MFREE (1.1)" << endl;
 
     //parse command line (puts these into the log file)
     ReadOptions& opts = ReadOptions::getInstance();
@@ -74,17 +75,28 @@ int main(int argc, char *argv[])
     Matrix aifmtx;
     aifmtx = aif.matrix(mask);
 
+    // Here we need to specifiy the exact TIs in the sequence
+    // By default, it is the dt value in the input
+    float ti_actual = opts.dt.value();
+    // For Turbo QUASAR, we need to consider the slice shifting effects
+    if(opts.turbo_quasar.set()) {
+      cout << "This is Turbo QUASAR Sequence!!!" << endl;
+      cout << "The current ASL_model_free function only supports consecutive bolus, i.e. no bolus skipping!!!" << endl;
+      int shift_factor = opts.shift_factor.value();
+      ti_actual = ti_actual / shift_factor;
+    }
+
     // do deconvolution
     cout << "Performing deconvolution" << endl;
     ColumnVector mag;
     Matrix resid;
-    Deconv(asldata,aifmtx,opts.dt.value(),mag,resid);
+    Deconv(asldata,aifmtx,ti_actual,mag,resid);
 
     // estimate BAT (of tissue)
     ColumnVector batt;
     if (opts.batout.set() | (opts.tcorrect.set() & !opts.batt.set())) {
       cout << "Estimating BAT" << endl;
-      Estimate_onset(asldata,batt,opts.dt.value());
+      Estimate_onset(asldata,batt,ti_actual);
 
       if (opts.batout.set()) {
 	//output the BAT image (from the tissue)
@@ -125,28 +137,28 @@ int main(int argc, char *argv[])
       }
       else {
 	//otherwise estimate BAT difference using the peak in the residue function
-	//Estimate_BAT_difference(resid,batd,opts.dt.value());
+	//Estimate_BAT_difference(resid,batd,ti_actual);
 
 	// Estiamte BAT difference using edge detection
 	ColumnVector bata;
-	Estimate_onset(aifmtx,bata,opts.dt.value());
+	Estimate_onset(aifmtx,bata,ti_actual);
 
 	batd = batt-bata;
       }
 
       for (int i=1; i<=batd.Nrows(); i++) { if (batd(i)<0.0) batd(i)=0.0; }
-      Correct_magnitude(mag,batd,opts.T1.value(),opts.dt.value(),opts.fa.value());
+      Correct_magnitude(mag,batd,opts.T1.value(),ti_actual,opts.fa.value());
     }
 
     if(opts.std.set()) {
       // do wild boostrapping std dev estimation for cbf
       cout << "Performing wild bootstrapping for precision estimation" << endl;
       ColumnVector magstd;
-      BootStrap(aifmtx, asldata, opts.dt.value(), mag, resid, opts.nwb.value(), magstd);
+      BootStrap(aifmtx, asldata, ti_actual, mag, resid, opts.nwb.value(), magstd);
 
       if (opts.tcorrect.set()) {
 	// if needed we should correct the std dev for timing discrpancies between aif and ctc
-	Correct_magnitude(magstd,batd,opts.T1.value(),opts.dt.value(),opts.fa.value());
+	Correct_magnitude(magstd,batd,opts.T1.value(),ti_actual,opts.fa.value());
       }
 
       // save it

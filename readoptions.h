@@ -49,6 +49,10 @@ class ReadOptions {
   Option<bool> std;
   Option<int> nwb;
 
+  // parameters specific to Turbo QUASAR
+  Option<bool> turbo_quasar; // specify this is Turbo QUASAR
+  Option<int> shift_factor; // Slice shifting factor <usually a factor of 2>
+
   void parse_command_line(int argc, char** argv);
   
  private:
@@ -91,6 +95,7 @@ help(string("-h,--help"), false,
       string("Temporal spacing in data (s)\n"),
       true,requires_argument),
 
+
    metric(string("--metric"),string(""),
 	  string("Metric image"),
 	  false,requires_argument),
@@ -122,9 +127,16 @@ help(string("-h,--help"), false,
        string("Calculate standard deviations on perfusion values using wild bootstrapping"),
        false,no_argument),
    nwb(string("--nwb"),1000,
-       string("Number of permuatations for wild bootstrapping"),
+       string("Number of permuatations for wild bootstrapping \n"),
        false,requires_argument),
-   
+
+    // Turbo QUASAR parameters
+    turbo_quasar(string("--turbo_quasar"),false,
+      string("Specify this is a Turbo QUASAR Sequence"),
+      false,no_argument),
+    shift_factor(string("--shift_factor"),1,
+      string("Slice shifting factor in Turbo QUASAR <default value: 1> \n"),
+      false,requires_argument),
 
    options("asl_mfree","asl_mfree --verbose\n")
    {
@@ -149,6 +161,9 @@ help(string("-h,--help"), false,
        
        options.add(std);
        options.add(nwb);
+
+       options.add(turbo_quasar);
+       options.add(shift_factor);
 
         }
      catch(X_OptionError& e) {
