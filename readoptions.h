@@ -41,6 +41,7 @@ class ReadOptions {
   Option<bool> tcorrect;
   Option<string> bata;
   Option<string> batt;
+  Option<float> bat_gradient_threshold;
   Option<bool> batout;
   Option<float> T1;
   Option<float> fa;
@@ -76,18 +77,18 @@ class ReadOptions {
  inline ReadOptions::ReadOptions() :
 
 help(string("-h,--help"), false,
-		    string("display this message"),
-		    false, no_argument),
+        string("display this message"),
+        false, no_argument),
    //input files
    datafile(string("--data,--datafile"), string("data"),
-			  string("ASL data file"),
-		     true, requires_argument),  
+        string("ASL data file"),
+         true, requires_argument),  
    maskfile(string("--mask"), string("maskfile"),
-	    string("mask"),
-	    true, requires_argument),
+      string("mask"),
+      true, requires_argument),
    outname(string("--out"), string("asl_mfree"),
-	   string("Output directory name"),
-	   true, requires_argument),
+     string("Output directory name"),
+     true, requires_argument),
    aif(string("--aif"),string(""),
        string("Arterial input functions for deconvolution (4D volume, one aif for each voxel within mask)"),
        true,requires_argument),
@@ -97,24 +98,27 @@ help(string("-h,--help"), false,
 
 
    metric(string("--metric"),string(""),
-	  string("Metric image"),
-	  false,requires_argument),
+    string("Metric image"),
+    false,requires_argument),
    mthresh(string("--mthresh"),0.0,
-	   string("Metric threshold\n"),
-	   false,requires_argument),
+     string("Metric threshold\n"),
+     false,requires_argument),
 
    tcorrect(string("--tcorrect"),false,
-	    string("Apply correction for timing difference between AIF and tissue curve"),
-	    false,no_argument),
+      string("Apply correction for timing difference between AIF and tissue curve"),
+      false,no_argument),
    bata(string("--bata"),string(""),
-	string("arterial BAT image"),
-	false,requires_argument),
+  string("arterial BAT image"),
+  false,requires_argument),
    batt(string("--batt"),string(""),
-	string("tissue BAT image"),
-	false,requires_argument),
+  string("tissue BAT image"),
+  false,requires_argument),
    batout(string("--bat"),false,
-	  string("Estimate tissue BAT from data (and save this image)"),
-	  false,no_argument),
+    string("Estimate tissue BAT from data (and save this image)"),
+    false,no_argument),
+  bat_gradient_threshold(string("--bat_grad_thr"),0.2,
+    string("Edge detection gradient threshold (default: 0.2)"),
+    false,no_argument),
    T1(string("--t1"),1.6,
       string("T1 (of blood) value"),
       false,requires_argument),
@@ -156,6 +160,7 @@ help(string("-h,--help"), false,
        options.add(bata);
        options.add(batt);
        options.add(batout);
+       options.add(bat_gradient_threshold);
        options.add(T1);
        options.add(fa);
        

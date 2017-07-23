@@ -6,16 +6,20 @@
 
 /*   CCOPYRIGHT   */
 
-#
-include<iostream> #include<math.h> #include<string> #include
-    "newmatap.h" #include "newmatio.h" #include
-    "newimage/newimageall.h" #include "miscmaths/miscmaths.h" #include
-    "utils/tracer_plus.h" #include "stdlib.h"
+#include <iostream>
+#include <math.h>
+#include <string>
+#include "newmatap.h"
+#include "newmatio.h"
+#include "newimage/newimageall.h"
+#include "miscmaths/miscmaths.h"
+#include "utils/tracer_plus.h"
+#include "stdlib.h"
 
-#
-    include "readoptions.h" #include "asl_mfree_functions.h"
+#include "readoptions.h"
+#include "asl_mfree_functions.h"
 
-    using namespace Utilities;
+using namespace Utilities;
 using namespace NEWMAT;
 using namespace NEWIMAGE;
 using namespace MISCMATHS;
@@ -91,7 +95,7 @@ int main(int argc, char* argv[]) {
     ColumnVector batt;
     if (opts.batout.set() | (opts.tcorrect.set() & !opts.batt.set())) {
       cout << "Estimating BAT" << endl;
-      Estimate_onset(asldata, batt, ti_actual);
+      Estimate_onset(asldata, batt, ti_actual, opts.bat_gradient_threshold.value());
 
       if (opts.batout.set()) {
         // output the BAT image (from the tissue)
@@ -138,7 +142,7 @@ int main(int argc, char* argv[]) {
 
         // Estiamte BAT difference using edge detection
         ColumnVector bata;
-        Estimate_onset(aifmtx, bata, ti_actual);
+        Estimate_onset(aifmtx, bata, ti_actual, opts.bat_gradient_threshold.value());
 
         batd = batt - bata;
       }

@@ -6,8 +6,7 @@
 
 /*   CCOPYRIGHT   */
 
-#
-include "asl_mfree_functions.h"
+#include "asl_mfree_functions.h"
 
     namespace OXASL {
   ReturnMatrix SVDdeconv(const Matrix& data, const Matrix& aif, float dt) {
@@ -336,7 +335,7 @@ include "asl_mfree_functions.h"
   }
 
   void Estimate_onset(const Matrix& curves, ColumnVector& bate,
-                      const float dt) {
+                      const float dt, const float gradient_threshold) {
     // Estimate the time of onset of the curve using edge detection
 
     int ntpts = curves.Nrows();
@@ -358,7 +357,9 @@ include "asl_mfree_functions.h"
       smoothdata = kernmtx * curves.Column(v);
       // take gradient (forward difference)
       dgrad = smoothdata.Rows(2, ntpts) - smoothdata.Rows(1, ntpts - 1);
-      float gthresh = 0.2 * dgrad.Maximum();
+      // Moss Edit: We need to let user set a gradient threshold (default is still 0.2)
+      //float gthresh = 0.2 * dgrad.Maximum();
+      float gthresh = gradient_threshold * dgrad.Maximum();
       int i = 1;
       bool cont = true;
       while (i < ntpts & cont) {
@@ -367,8 +368,10 @@ include "asl_mfree_functions.h"
         else
           i++;
       }
-      // cout << i << " " ;
+      //cout << i << endl;
       bate.Row(v) = i * dt;
+      // Moss edit: The edge should start from zero.
+      bate.Row(v) = (i - 1) * dt;
     }
     cout << endl;
   }

@@ -35,7 +35,7 @@ namespace OXASL {
   void Estimate_BAT_difference(const Matrix& resid, ColumnVector& batd, const float dt);
   void Correct_magnitude(ColumnVector& mag, const ColumnVector& batd, const float T1, const float dt, const float fa);
 
-  void Estimate_onset(const Matrix& curves, ColumnVector& bate, const float dt);
+  void Estimate_onset(const Matrix& curves, ColumnVector& bate, const float dt, const float gradient_threshold);
 
   // estimation of magntiude precision
   void BootStrap(const Matrix& aif, const Matrix& data, float dt, const ColumnVector& mag, const Matrix& resid, int Nwb, ColumnVector& magsd);
