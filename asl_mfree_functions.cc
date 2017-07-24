@@ -369,7 +369,7 @@
           i++;
       }
       //cout << i << endl;
-      bate.Row(v) = i * dt;
+      // bate.Row(v) = i * dt;
       // Moss edit: The edge should start from zero.
       bate.Row(v) = (i - 1) * dt;
     }
