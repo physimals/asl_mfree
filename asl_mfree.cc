@@ -28,8 +28,7 @@ using namespace OXASL;
 
 int main(int argc, char* argv[]) {
   try {
-    // cout << "ASL_MFREE (1.0)" << endl;
-    cout << "ASL_MFREE (1.1)" << endl;
+    cout << "ASL_MFREE " << GIT_VERSION << " (" << GIT_DATE << ")" << endl;
 
     // parse command line (puts these into the log file)
     ReadOptions& opts = ReadOptions::getInstance();
