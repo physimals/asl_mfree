@@ -8,6 +8,11 @@
 
 #include "asl_mfree_functions.h"
 
+#include <iomanip>
+#include <iostream>
+
+using namespace std;
+
     namespace OXASL {
   ReturnMatrix SVDdeconv(const Matrix& data, const Matrix& aif, float dt) {
     // do a singular value deconvolution of the data to get residue function
@@ -23,6 +28,7 @@
     DiagonalMatrix D;
     Matrix U;
     Matrix V;
+    cout << "  0%" << flush;
     for (int v = 1; v <= nvox; v++) {
       // make convolution matrix
       aifconv = dt * convmtx(aif.Column(v));
@@ -36,7 +42,12 @@
       }
       // calculate resdiue
       residue.Column(v) = V * D * U.t() * data.Column(v);
+      // Report progress
+      int percent = (100 * v) / nvox;
+      cout << "\b\b\b\b";
+      cout << setw(3) << percent << "%" << flush;
     }
+    cout << "\b\b\b\b100%" << endl;
 
     return residue;
   }
@@ -73,6 +84,7 @@
     DiagonalMatrix D;
     Matrix U;
     Matrix V;
+    cout << "  0%" << flush;
     for (int v = 1; v <= nvox; v++) {
       // make convolution matrix
       aifconv = dt * convmtx_circular(aif.Column(v) & padding);
@@ -86,7 +98,12 @@
       }
       // calculate resdiue
       residue.Column(v) = V * D * U.t() * (data.Column(v) & padding);
+      // Report progress
+      int percent = (100 * v) / nvox;
+      cout << "\b\b\b\b";
+      cout << setw(3) << percent << "%" << flush;
     }
+    cout << "\b\b\b\b100%" << endl;
 
     residue = residue.Rows(
         1,
@@ -117,6 +134,7 @@
     DiagonalMatrix D;
     Matrix U;
     Matrix V;
+    cout << "  0%" << flush;
     for (int v = 1; v <= nvox; v++) {
       // make convolution matrix
       aifconv = dt * convmtx_circular(aif.Column(v) & padding);
@@ -147,7 +165,13 @@
       }
 
       residue.Column(v) = resid;
+
+      // Report progress
+      int percent = (100 * v) / nvox;
+      cout << "\b\b\b\b";
+      cout << setw(3) << percent << "%" << flush;
     }
+    cout << "\b\b\b\b100%" << endl;
 
     return residue;
   }
