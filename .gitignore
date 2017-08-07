@@ -1,0 +1,4 @@
+*.o
+asl_mfree
+depend.mk
+.*
