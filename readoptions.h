@@ -41,8 +41,8 @@ class ReadOptions {
   Option<bool> tcorrect;
   Option<string> bata;
   Option<string> batt;
-  Option<float> bat_gradient_threshold;
   Option<bool> batout;
+  Option<float> bat_gradient_threshold;
   Option<float> T1;
   Option<float> fa;
 

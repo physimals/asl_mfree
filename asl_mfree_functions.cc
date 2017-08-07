@@ -153,7 +153,7 @@ using namespace std;
 
       // start removing singular values one by one until we get the OI we want
       int i = nti + nextra;
-      while (oi > oi_thresh & i > 1) {
+      while ((oi > oi_thresh) && (i > 1)) {
         D(i, i) = 0;
         resid = V * D * U.t() * (data.Column(v) & padding);
         oi =
@@ -347,10 +347,9 @@ using namespace std;
 
     batd.ReSize(resid.Ncols());
 
-    float magtemp;
     int battemp;
     for (int v = 1; v <= resid.Ncols(); v++) {
-      magtemp = (resid.Column(v)).Maximum1(battemp);
+      (resid.Column(v)).Maximum1(battemp);
       if (battemp > resid.Nrows() / 2) {
         battemp -= resid.Nrows();
       }
@@ -386,7 +385,7 @@ using namespace std;
       float gthresh = gradient_threshold * dgrad.Maximum();
       int i = 1;
       bool cont = true;
-      while (i < ntpts & cont) {
+      while ((i < ntpts) && cont) {
         if (dgrad(i) > gthresh)
           cont = false;
         else
