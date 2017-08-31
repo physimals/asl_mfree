@@ -30,7 +30,7 @@ int main(int argc, char *argv[])
 {
     try
     {
-        cout << "ASL_MFREE " << GIT_VERSION << " (" << GIT_DATE << ")" << endl;
+        cout << GIT_VERSION << " (" << GIT_DATE << ")" << endl;
 
         // parse command line (puts these into the log file)
         ReadOptions &opts = ReadOptions::getInstance();
