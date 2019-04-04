@@ -6,14 +6,15 @@ USRINCFLAGS = -I${INC_NEWMAT} -I${INC_ZLIB}
 USRLDFLAGS = -L${LIB_NEWMAT} -L${LIB_ZLIB}
 
 FSLVERSION= $(shell cat ${FSLDIR}/etc/fslversion | head -c 1)
-ifeq ($(FSLVERSION), 5)
-  NIFTILIB = -lfslio -lniftiio
-  LIB_NEWMAT = -lnewmat
-else
+ifeq ($(FSLVERSION), 5) 
+  NIFTILIB = -lfslio -lniftiio 
+  MATLIB = -lnewmat
+else 
   NIFTILIB = -lNewNifti
+  MATLIB = -lopenblas
 endif
 
-LIBS = -lutils -lnewimage -lmiscmaths -lm ${LIB_NEWMAT} ${NIFTILIB} -lprob -lznz -lz
+LIBS = -lutils -lnewimage -lmiscmaths -lm ${MATLIB} ${NIFTILIB} -lprob -lznz -lz
 
 XFILES = asl_mfree
 
