@@ -5,7 +5,15 @@ PROJNAME = asl_mfree
 USRINCFLAGS = -I${INC_NEWMAT} -I${INC_ZLIB}
 USRLDFLAGS = -L${LIB_NEWMAT} -L${LIB_ZLIB}
 
-LIBS = -lutils -lnewimage -lmiscmaths -lm -lnewmat -lfslio -lniftiio -lprob -lznz -lz
+FSLVERSION= $(shell cat ${FSLDIR}/etc/fslversion | head -c 1)
+ifeq ($(FSLVERSION), 5)
+  NIFTILIB = -lfslio -lniftiio
+  LIB_NEWMAT = -lnewmat
+else
+  NIFTILIB = -lNewNifti
+endif
+
+LIBS = -lutils -lnewimage -lmiscmaths -lm ${LIB_NEWMAT} ${NIFTILIB} -lprob -lznz -lz
 
 XFILES = asl_mfree
 
