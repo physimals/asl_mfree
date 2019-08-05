@@ -193,7 +193,10 @@ ReturnMatrix convmtx_circular(const ColumnVector &invec)
     for (int i = 1; i <= nentry; i++)
     {
         cmat.SubMatrix(i, i, 1, i) = ((invec.Rows(1, i)).Reverse()).AsRow();
-        cmat.SubMatrix(i, i, i + 1, nentry) = ((invec.Rows(i + 1, nentry)).Reverse()).AsRow();
+        if (i < nentry) 
+        {
+            cmat.SubMatrix(i, i, i + 1, nentry) = ((invec.Rows(i + 1, nentry)).Reverse()).AsRow();
+        }
     }
 
     return cmat;
