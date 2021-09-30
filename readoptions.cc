@@ -6,8 +6,6 @@
 
 /*  CCOPYRIGHT  */
 
-#define WANT_STREAM
-#define WANT_MATH
 
 #include "readoptions.h"
 #include "utils/log.h"
@@ -44,7 +42,7 @@ void ReadOptions::parse_command_line(int argc, char **argv)
     if (help.value() || !options.check_compulsory_arguments())
     {
         options.usage();
-        throw Exception("Not all of the compulsory arguments have been provided");
+        throw std::runtime_error("Not all of the compulsory arguments have been provided");
     }
 }
 }

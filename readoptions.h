@@ -17,6 +17,7 @@
 #include <stdlib.h>
 #include <string>
 
+using namespace std;
 using namespace Utilities;
 
 namespace OXASL
