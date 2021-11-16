@@ -16,9 +16,9 @@ else
 
   USRINCFLAGS = -I${INC_NEWMAT} -I${INC_ZLIB} \
                 -I${FSLDIR}/extras/include/armawrap
-  USRLDFLAGS  = -L${LIB_NEWMAT} -L${LIB_ZLIB}             \
-                -lnewimage -lmiscmaths -lutils -lNewNifti \
-                -lprob -lznz ${MATLIB} -lm -lz
+  USRLDFLAGS  = -L${LIB_NEWMAT} -L${LIB_ZLIB} -L${LIB_CPROB} \
+                 -lnewimage -lmiscmaths -lutils -lNewNifti   \
+                 -lcprob -lznz ${MATLIB} -lm -lz
 endif
 
 XFILES = asl_mfree
