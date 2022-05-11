@@ -8,8 +8,7 @@
 
 #include "miscmaths/miscmaths.h"
 #include "newimage/newimageall.h"
-#include "newmatap.h"
-#include "newmatio.h"
+#include "armawrap/newmat.h"
 #include "stdlib.h"
 #include "utils/tracer_plus.h"
 #include <iostream>

@@ -9,12 +9,14 @@
 #if !defined(asl_mfree_functions_h)
 #define asl_mfree_functions_h
 
+#include "armawrap/newmat.h"
 #include "miscmaths/miscmaths.h"
 #include "newimage/newimageall.h"
 #include <string>
 
 using namespace MISCMATHS;
 using namespace NEWIMAGE;
+using namespace NEWMAT;
 
 namespace OXASL
 {
